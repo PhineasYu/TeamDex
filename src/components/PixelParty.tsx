@@ -16,7 +16,7 @@ function rng(seed: number) {
 }
 
 /** Dancing pixel people + falling square confetti. The newcomer is placed in the middle. */
-export function PixelParty({ dancers, height = 360 }: { dancers: { avatar: Avatar; name: string; me?: boolean }[]; height?: number }) {
+export function PixelParty({ dancers, height = 360, background = true }: { dancers: { avatar: Avatar; name: string; me?: boolean }[]; height?: number; background?: boolean }) {
   const reduce = useReducedMotion();
   const [frame, setFrame] = useState(0);
 
@@ -43,7 +43,7 @@ export function PixelParty({ dancers, height = 360 }: { dancers: { avatar: Avata
   const spriteH = Math.min(92, Math.floor((Math.min(window.innerWidth, 560) - 32) / Math.max(n, 1) / 0.923) - 4);
 
   return (
-    <div className="relative overflow-hidden" style={{ height, background: 'linear-gradient(180deg,#9FD3F3 0%,#CFEAFA 62%)' }}>
+    <div className="relative overflow-hidden" style={{ height, background: background ? 'linear-gradient(180deg,#9FD3F3 0%,#CFEAFA 62%)' : 'transparent' }}>
       <div className="party-floor" />
       {!reduce &&
         confetti.map((c, i) => (

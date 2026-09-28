@@ -60,7 +60,7 @@ export function Party({ session }: { session: Session }) {
   ];
 
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden" style={{ background: 'linear-gradient(180deg,#9FD3F3 0%,#CFEAFA 62%)' }}>
+    <div className="relative min-h-[100dvh] overflow-hidden" style={{ background: 'linear-gradient(180deg,#9FD3F3 0%,#CFEAFA 70%,#E4F3FB 100%)' }}>
       <div className="mx-auto max-w-[560px] px-4" style={{ paddingTop: 'calc(var(--safe-top) + 16px)' }}>
         <TopBar me={me} />
         <h1 className="pixel-title mt-6 text-center text-[22px]">
@@ -69,9 +69,10 @@ export function Party({ session }: { session: Session }) {
           unlocked!
         </h1>
       </div>
-      <PixelParty dancers={dancers} height={Math.min(420, Math.max(300, window.innerHeight * 0.45))} />
+      {/* No own background: the page gradient runs through, so there is no seam */}
+      <PixelParty dancers={dancers} background={false} height={Math.min(420, Math.max(300, window.innerHeight * 0.45))} />
       <div className="mx-auto max-w-[560px] px-4" style={{ paddingBottom: 'calc(var(--safe-bottom) + 112px)' }}>
-        <div className="-mt-4 rounded-[24px] bg-white px-5 py-4 text-center text-[16px] font-semibold shadow-[0_6px_0_#C8F53C]">Fika invite sent to {formatNames(names)}</div>
+        <div className="relative z-10 -mt-4 rounded-[24px] bg-white px-5 py-4 text-center text-[16px] font-semibold shadow-[0_6px_0_#C8F53C]">Fika invite sent to {formatNames(names)}</div>
         <p className="mt-4 text-center text-[15px]">Today 15:00 in the kitchen. Your first week ends with people who know you.</p>
       </div>
     </div>
