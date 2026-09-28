@@ -26,7 +26,8 @@ export function formatNames(names: string[]): string {
 
 export function publicBaseUrl(): string {
   const env = import.meta.env.VITE_PUBLIC_BASE_URL;
-  return (env && env.trim() ? env.trim() : window.location.origin).replace(/\/$/, '');
+  const base = env && env.trim() ? env.trim() : window.location.origin + import.meta.env.BASE_URL;
+  return base.replace(/\/$/, '');
 }
 
 export function cardUrl(token: string): string {
