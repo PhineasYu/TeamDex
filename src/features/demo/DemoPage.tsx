@@ -83,34 +83,29 @@ export function DemoPage() {
   const { company, people } = data;
   const byName = (n: string) => people.find((p) => p.display_name === n);
 
-  const resetAll = async () => {
-    setBusy('reset');
-    try {
-      await api.resetDemo(company.id);
-      forgetThisDevice();
-      play('pop');
-      toast({ title: 'Demo reset', body: 'Data is back to the start. This phone is signed out.' });
-      reload();
-    } finally {
-      setBusy(null);
-    }
+  // Yunfei collects every key colleague except Patrik, so scanning Patrik live unlocks the party.
+  const collectAllButPatrik = async () => {
+    const yunfei = byName('Yunfei');
+    const patrik = byName('Patrik');
+    if (!yunfei || !patrik) return 0;
+    const quest = await api.getQuestForNewcomer(yunfei.id);
+    const others = (quest?.targets ?? []).filter((t) => t.person_id !== patrik.id);
+    for (const t of others) await api.collectCard(yunfei.id, await api.getMyQrToken(t.person_id));
+    return others.length;
   };
 
-  // Yunfei collects every key colleague except Patrik, so scanning Patrik live unlocks the party.
-  const prepareFinale = async () => {
-    setBusy('finale');
+  const reset = async (finale: boolean) => {
+    setBusy(finale ? 'pitch' : 'empty');
     try {
-      const yunfei = byName('Yunfei');
-      const patrik = byName('Patrik');
-      if (!yunfei || !patrik) return;
-      const quest = await api.getQuestForNewcomer(yunfei.id);
-      const others = (quest?.targets ?? []).filter((t) => t.person_id !== patrik.id);
-      for (const t of others) {
-        const token = await api.getMyQrToken(t.person_id);
-        await api.collectCard(yunfei.id, token);
-      }
+      await api.resetDemo(company.id);
+      const n = finale ? await collectAllButPatrik() : 0;
+      forgetThisDevice();
       play('pop');
-      toast({ title: 'Finale ready', body: `Yunfei has ${others.length} of ${quest?.party_goal ?? 5}. Scanning Patrik unlocks the party.` });
+      toast({
+        title: finale ? 'Ready for the pitch' : 'Demo reset',
+        body: finale ? `Yunfei has ${n} of 5. Scanning Patrik unlocks the party.` : 'Yunfei is back to 0 of 5.',
+      });
+      reload();
     } finally {
       setBusy(null);
     }
@@ -126,10 +121,16 @@ export function DemoPage() {
 
       <Panel color="lime" className="mt-5">
         <h2 className="text-[18px] font-bold">1. Reset before each run</h2>
-        <p className="mt-1 text-[14px]">Clears every collected card, fun fact, quiz and party. This phone goes back to the team-code screen.</p>
-        <Pill variant="dark" block className="mt-3" disabled={!!busy} onClick={resetAll}>
-          <RotateCcw size={18} /> {busy === 'reset' ? 'Resetting…' : 'Reset all demo data'}
+        <p className="mt-1 text-[14px]">
+          Clears everything, then gives Yunfei four of her five key colleagues. Only Patrik is left, so scanning him on stage plays the swap and unlocks the onboarding party.
+        </p>
+        <Pill variant="dark" block className="mt-3" disabled={!!busy} onClick={() => reset(true)}>
+          <PartyPopper size={18} /> {busy === 'pitch' ? 'Setting up…' : 'Reset for the pitch (Yunfei 4 of 5)'}
         </Pill>
+        <Pill variant="secondary" block className="mt-2 !min-h-[44px] text-[14px]" disabled={!!busy} onClick={() => reset(false)}>
+          <RotateCcw size={16} /> {busy === 'empty' ? 'Resetting…' : 'Reset to empty (Yunfei 0 of 5)'}
+        </Pill>
+        <p className="mt-2 text-[12px] opacity-70">This device also goes back to the team-code screen.</p>
       </Panel>
 
       <h2 className="mb-2 mt-7 text-[18px] font-bold">2. Put each person on their phone</h2>
@@ -170,16 +171,6 @@ export function DemoPage() {
           );
         })}
       </div>
-
-      <h2 className="mb-2 mt-7 text-[18px] font-bold">3. Optional: party finale</h2>
-      <Panel color="pink">
-        <p className="text-[14px]">
-          Gives Yunfei four of her five key colleagues now, leaving Patrik. When Yunfei scans Patrik on stage, the swap plays and the onboarding party unlocks.
-        </p>
-        <Pill block className="mt-3" disabled={!!busy} onClick={prepareFinale}>
-          <PartyPopper size={18} /> {busy === 'finale' ? 'Collecting…' : 'Prepare the party finale'}
-        </Pill>
-      </Panel>
 
       <h2 className="mb-2 mt-7 text-[18px] font-bold">Show the sign-up flow</h2>
       <Panel color="white">
