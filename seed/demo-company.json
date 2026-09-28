@@ -1,0 +1,575 @@
+{
+  "_note": "Local-mode demo data. Mirrors seed_demo() in supabase/schema.sql. Relative time markers (NOW, DAY_0, DAY_MINUS_4, DAYS_AGO_n, HOURS_AGO_n) must be converted to real ISO timestamps/dates when the LocalAdapter initialises. 'secrets' exist only because local mode has no server; never render answer_keywords in the UI.",
+  "company": {
+    "id": "c0000000-0000-4000-8000-000000000001",
+    "name": "Fika Labs",
+    "join_code": "FIKA24"
+  },
+  "people": [
+    {
+      "id": "a0000000-0000-4000-8000-000000000001",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Elin",
+      "role_title": "Product Designer",
+      "department": "design",
+      "help_topics": [
+        "user flows",
+        "Figma files",
+        "the best fika spot"
+      ],
+      "avatar": {
+        "hair": "#F2C14E",
+        "skin": "#F6D2B8",
+        "shirt": "#FF7AB8",
+        "pants": "#13222E",
+        "shoes": "#5AAFE3"
+      },
+      "card_no": 1,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Elin what she sketches in meetings",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-elin"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000002",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Oskar",
+      "role_title": "Backend Engineer",
+      "department": "engineering",
+      "help_topics": [
+        "APIs",
+        "servers",
+        "why the build is red"
+      ],
+      "avatar": {
+        "hair": "#6B3E26",
+        "skin": "#F1C6A0",
+        "shirt": "#3DDBB0",
+        "pants": "#13222E",
+        "shoes": "#13222E"
+      },
+      "card_no": 2,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Oskar how he gets to work in winter",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-oskar"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000003",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Maja",
+      "role_title": "Account Executive",
+      "department": "sales",
+      "help_topics": [
+        "clients",
+        "demos",
+        "pricing questions"
+      ],
+      "avatar": {
+        "hair": "#2B1D14",
+        "skin": "#E8B48A",
+        "shirt": "#C8F53C",
+        "pants": "#13222E",
+        "shoes": "#FF7AB8"
+      },
+      "card_no": 3,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Maja what she does every Tuesday night",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-maja"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000004",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Johan",
+      "role_title": "People Partner",
+      "department": "people",
+      "help_topics": [
+        "contracts",
+        "benefits",
+        "how things work here"
+      ],
+      "avatar": {
+        "hair": "#D9B38C",
+        "skin": "#F6D2B8",
+        "shirt": "#FF8A7A",
+        "pants": "#13222E",
+        "shoes": "#13222E"
+      },
+      "card_no": 4,
+      "kind": "colleague",
+      "is_hr": true,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Johan what he bakes on Fridays",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-johan"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000005",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Sara",
+      "role_title": "Finance Lead",
+      "department": "finance",
+      "help_topics": [
+        "budgets",
+        "invoices",
+        "expense reports"
+      ],
+      "avatar": {
+        "hair": "#13222E",
+        "skin": "#C68B59",
+        "shirt": "#2FD18A",
+        "pants": "#13222E",
+        "shoes": "#C8F53C"
+      },
+      "card_no": 5,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Sara about the strangest race she has run",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-sara"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000006",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Ahmed",
+      "role_title": "Product Manager",
+      "department": "product",
+      "help_topics": [
+        "the roadmap",
+        "priorities",
+        "customer feedback"
+      ],
+      "avatar": {
+        "hair": "#13222E",
+        "skin": "#8D5A3B",
+        "shirt": "#A86BFF",
+        "pants": "#13222E",
+        "shoes": "#5AAFE3"
+      },
+      "card_no": 6,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Ahmed which language he is learning, and how",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-ahmed"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000007",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Lina",
+      "role_title": "Office Manager",
+      "department": "ops",
+      "help_topics": [
+        "keys and access",
+        "laptops and equipment",
+        "booking rooms"
+      ],
+      "avatar": {
+        "hair": "#FF7AB8",
+        "skin": "#F6D2B8",
+        "shirt": "#FFB36B",
+        "pants": "#13222E",
+        "shoes": "#13222E"
+      },
+      "card_no": 7,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": "Ask Lina about her dog",
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-lina"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000008",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Viktor",
+      "role_title": "Frontend Engineer",
+      "department": "engineering",
+      "help_topics": [
+        "the design system",
+        "the mobile app",
+        "accessibility"
+      ],
+      "avatar": {
+        "hair": "#6B3E26",
+        "skin": "#F1C6A0",
+        "shirt": "#5AAFE3",
+        "pants": "#13222E",
+        "shoes": "#FF7AB8"
+      },
+      "card_no": 8,
+      "kind": "colleague",
+      "is_hr": false,
+      "start_date": null,
+      "fun_fact_prompt": null,
+      "open_to_chat": true,
+      "card_claimed": false,
+      "hidden": false,
+      "qr_token": "fk-viktor"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000009",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Yunfei",
+      "role_title": "Design Intern",
+      "department": "design",
+      "help_topics": [
+        "service design",
+        "prototyping",
+        "user research"
+      ],
+      "avatar": {
+        "hair": "#13222E",
+        "skin": "#F3D1B0",
+        "shirt": "#5AAFE3",
+        "pants": "#13222E",
+        "shoes": "#C8F53C"
+      },
+      "card_no": 9,
+      "kind": "newcomer",
+      "is_hr": false,
+      "start_date": "DAY_0",
+      "fun_fact_prompt": null,
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-yunfei"
+    },
+    {
+      "id": "a0000000-0000-4000-8000-000000000010",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "display_name": "Noor",
+      "role_title": "Data Analyst",
+      "department": "product",
+      "help_topics": [
+        "dashboards",
+        "SQL",
+        "data questions"
+      ],
+      "avatar": {
+        "hair": "#2B1D14",
+        "skin": "#C68B59",
+        "shirt": "#BDF4E0",
+        "pants": "#13222E",
+        "shoes": "#FF7AB8"
+      },
+      "card_no": 10,
+      "kind": "newcomer",
+      "is_hr": false,
+      "start_date": "DAY_MINUS_4",
+      "fun_fact_prompt": null,
+      "open_to_chat": true,
+      "card_claimed": true,
+      "hidden": false,
+      "qr_token": "fk-noor"
+    }
+  ],
+  "secrets": [
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000001",
+      "fun_fact_text": "Has sketched every plant in the office.",
+      "answer_keywords": [
+        "plant"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000002",
+      "fun_fact_text": "Skates to work across the lake in winter.",
+      "answer_keywords": [
+        "skate",
+        "skating",
+        "ice"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000003",
+      "fun_fact_text": "Sings in a choir every Tuesday.",
+      "answer_keywords": [
+        "choir",
+        "sing"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000004",
+      "fun_fact_text": "Bakes cinnamon buns every Friday.",
+      "answer_keywords": [
+        "cinnamon",
+        "bun",
+        "kanelbulle"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000005",
+      "fun_fact_text": "Has run a marathon in the snow.",
+      "answer_keywords": [
+        "marathon",
+        "snow"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000006",
+      "fun_fact_text": "Is learning Swedish through ABBA songs.",
+      "answer_keywords": [
+        "abba"
+      ]
+    },
+    {
+      "person_id": "a0000000-0000-4000-8000-000000000007",
+      "fun_fact_text": "Her dog has its own office badge.",
+      "answer_keywords": [
+        "badge"
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "id": "b0000000-0000-4000-8000-000000000001",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "newcomer_id": "a0000000-0000-4000-8000-000000000009",
+      "party_goal": 5,
+      "party_unlocked_at": null,
+      "created_at": "NOW",
+      "targets": [
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000001",
+          "reason": "Your buddy for week one"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000002",
+          "reason": "Ask him when the build breaks"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000004",
+          "reason": "Your People Partner"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000007",
+          "reason": "Keys, laptop and room bookings"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000005",
+          "reason": "Expenses and invoices"
+        }
+      ]
+    },
+    {
+      "id": "b0000000-0000-4000-8000-000000000002",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "newcomer_id": "a0000000-0000-4000-8000-000000000010",
+      "party_goal": 5,
+      "party_unlocked_at": "DAYS_AGO_1",
+      "created_at": "DAYS_AGO_6",
+      "targets": [
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000006",
+          "reason": "Your manager"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000003",
+          "reason": "Understand our clients"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000004",
+          "reason": "Your People Partner"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000007",
+          "reason": "Keys, laptop and room bookings"
+        },
+        {
+          "person_id": "a0000000-0000-4000-8000-000000000005",
+          "reason": "Finance data owner"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "d0000000-0000-4000-8000-000000000001",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000010",
+      "collected_id": "a0000000-0000-4000-8000-000000000006",
+      "method": "qr",
+      "fact_unlocked_at": "DAYS_AGO_2",
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000002",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000006",
+      "collected_id": "a0000000-0000-4000-8000-000000000010",
+      "method": "exchange",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000003",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000010",
+      "collected_id": "a0000000-0000-4000-8000-000000000003",
+      "method": "qr",
+      "fact_unlocked_at": "DAYS_AGO_2",
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000004",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000003",
+      "collected_id": "a0000000-0000-4000-8000-000000000010",
+      "method": "exchange",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000005",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000010",
+      "collected_id": "a0000000-0000-4000-8000-000000000004",
+      "method": "qr",
+      "fact_unlocked_at": "DAYS_AGO_2",
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000006",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000004",
+      "collected_id": "a0000000-0000-4000-8000-000000000010",
+      "method": "exchange",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000007",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000010",
+      "collected_id": "a0000000-0000-4000-8000-000000000007",
+      "method": "qr",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000008",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000007",
+      "collected_id": "a0000000-0000-4000-8000-000000000010",
+      "method": "exchange",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000009",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000010",
+      "collected_id": "a0000000-0000-4000-8000-000000000005",
+      "method": "qr",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000010",
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "collector_id": "a0000000-0000-4000-8000-000000000005",
+      "collected_id": "a0000000-0000-4000-8000-000000000010",
+      "method": "exchange",
+      "fact_unlocked_at": null,
+      "created_at": "DAYS_AGO_3"
+    }
+  ],
+  "quiz_attempts": [
+    {
+      "id": "e0000000-0000-4000-8000-000000000001",
+      "quest_id": "b0000000-0000-4000-8000-000000000002",
+      "score": 4,
+      "total": 5,
+      "created_at": "DAYS_AGO_1"
+    }
+  ],
+  "pulse_checks": [
+    {
+      "newcomer_id": "a0000000-0000-4000-8000-000000000010",
+      "day": 1,
+      "score": 2,
+      "created_at": "DAYS_AGO_4"
+    },
+    {
+      "newcomer_id": "a0000000-0000-4000-8000-000000000010",
+      "day": 5,
+      "score": 4,
+      "created_at": "HOURS_AGO_1"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "type": "card_collected",
+      "actor_id": "a0000000-0000-4000-8000-000000000010",
+      "target_id": "a0000000-0000-4000-8000-000000000006",
+      "payload": {},
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": 2,
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "type": "card_collected",
+      "actor_id": "a0000000-0000-4000-8000-000000000010",
+      "target_id": "a0000000-0000-4000-8000-000000000003",
+      "payload": {},
+      "created_at": "DAYS_AGO_3"
+    },
+    {
+      "id": 3,
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "type": "fact_unlocked",
+      "actor_id": "a0000000-0000-4000-8000-000000000010",
+      "target_id": "a0000000-0000-4000-8000-000000000004",
+      "payload": {},
+      "created_at": "DAYS_AGO_2"
+    },
+    {
+      "id": 4,
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "type": "party_unlocked",
+      "actor_id": "a0000000-0000-4000-8000-000000000010",
+      "target_id": null,
+      "payload": {
+        "quest_id": "b0000000-0000-4000-8000-000000000002"
+      },
+      "created_at": "DAYS_AGO_1"
+    },
+    {
+      "id": 5,
+      "company_id": "c0000000-0000-4000-8000-000000000001",
+      "type": "quest_created",
+      "actor_id": "a0000000-0000-4000-8000-000000000009",
+      "target_id": null,
+      "payload": {
+        "quest_id": "b0000000-0000-4000-8000-000000000001"
+      },
+      "created_at": "HOURS_AGO_1"
+    }
+  ]
+}

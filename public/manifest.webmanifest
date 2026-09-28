@@ -1,0 +1,10 @@
+{
+  "name": "Teamdex",
+  "short_name": "Teamdex",
+  "description": "Your new team, as a card collection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEF5F1",
+  "theme_color": "#EEF5F1",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
