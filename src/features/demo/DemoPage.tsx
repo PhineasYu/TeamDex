@@ -46,7 +46,8 @@ export function DemoLogin() {
       if (!cast) return setErr(`No demo person called "${who}".`);
       const data = await loadCompany().catch(() => null);
       const person = data?.people.find((p) => p.display_name.toLowerCase() === cast.name.toLowerCase());
-      if (!data || !person) return setErr("Couldn't load the demo team. Check the connection and try again.");
+      if (!data) return setErr("Couldn't load the demo team. Check the connection and try again.");
+      if (!person) return setErr(`${cast.name} isn't in the demo data yet. Re-run supabase/schema.sql in the Supabase SQL Editor, then scan again.`);
       setPendingToken(null);
       setSession({ companyId: data.company.id, joinCode: data.company.join_code, personId: person.id, role: cast.role });
       nav(cast.role === 'colleague' ? '/me/card' : homeFor(cast.role), { replace: true });
