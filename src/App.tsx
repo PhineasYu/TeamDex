@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { LiveNotifier } from './components/LiveNotifier';
 import { BottomNav, OfflineBanner, RoleGate } from './components/Shell';
+import { SoundPrompt } from './components/SoundPrompt';
 import { ToastProvider } from './components/Toast';
 import { ColleagueHome } from './features/colleague/ColleagueHome';
 import { EditCard } from './features/colleague/EditCard';
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Nav />
+        <SoundPrompt />
       </ToastProvider>
     </BrowserRouter>
   );

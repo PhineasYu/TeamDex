@@ -2,7 +2,7 @@ import { animate, motion, useMotionValue, useReducedMotion, useTransform, type A
 import { useEffect, useMemo, useState } from 'react';
 import type { Person } from '../lib/api';
 import { HOLO } from '../lib/departments';
-import { play, vibrate } from '../lib/sound';
+import { play, unlockAudio, vibrate } from '../lib/sound';
 import { Card, CARD_H, CARD_W } from './Card';
 import { CardBack } from './CardBack';
 import { TiltCard } from './TiltCard';
@@ -19,6 +19,8 @@ interface Props {
   still?: boolean;
   children?: React.ReactNode;
   onBackdrop?: () => void;
+  /** Wait for a tap before playing, so the browser allows sound (no tap has happened on this page yet). */
+  gate?: boolean;
 }
 
 // Timeline (seconds)
@@ -34,11 +36,12 @@ const PARTICLE_COLORS = ['#C8F53C', '#FF7AB8', '#3DDBB0', '#6FD3FF', '#A86BFF', 
  * The card exchange: your card rises, theirs drops in face-down, they collide (flash, shockwave,
  * pixel burst, shake), yours flies off to them and theirs flips face-up under rotating rays.
  */
-export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, children, onBackdrop }: Props) {
+export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, children, onBackdrop, gate }: Props) {
   const reduce = useReducedMotion();
   const animated = !still && !reduce;
   const swap = animated && !!mine;
   const [landed, setLanded] = useState(!animated);
+  const [started, setStarted] = useState(!(gate && animated));
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -72,7 +75,7 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
   );
 
   useEffect(() => {
-    if (!animated) return;
+    if (!animated || !started) return;
     const ctrls: AnimationPlaybackControls[] = [];
     const timers: number[] = [];
     const at = (s: number, fn: () => void) => timers.push(window.setTimeout(fn, s * 1000));
@@ -119,7 +122,7 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
       timers.forEach(clearTimeout);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animated, swap]);
+  }, [animated, swap, started]);
 
   const hit = swap ? T_HIT : 0.1;
   const cardW = CARD_W * S;
@@ -131,14 +134,14 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
     <div className="fixed inset-0 z-[60] overflow-y-auto overflow-x-hidden bg-ink text-white" onClick={onBackdrop}>
       <motion.div className="absolute inset-x-0 top-0 h-[100dvh] overflow-hidden" style={{ x: stageX }}>
         {/* coloured glow + rotating rays behind the landed card */}
-        <motion.div
+        {started && <motion.div
           className="pointer-events-none absolute inset-0"
           style={{ background: `radial-gradient(circle at 50% ${centerTop}px, ${glow[0]}AA 0%, ${glow[2]}44 32%, transparent 62%)` }}
           initial={{ opacity: animated ? 0 : 0.7 }}
           animate={{ opacity: 0.85 }}
           transition={{ delay: animated ? hit : 0, duration: 0.6 }}
-        />
-        {!reduce && (
+        />}
+        {!reduce && started && (
           <motion.div className="pointer-events-none absolute inset-x-0" style={{ top: centerTop, height: 0 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: animated ? hit + 0.1 : 0, duration: 0.8 }}>
             <div className="rays" />
           </motion.div>
@@ -147,7 +150,7 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
         <div className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(circle at 50% ${centerTop}px, transparent 0%, transparent 30%, #13222E 78%)` }} />
 
         {/* shockwave rings */}
-        {animated &&
+        {animated && started &&
           [0, 0.1].map((d, i) => (
             <motion.div
               key={i}
@@ -160,7 +163,7 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
           ))}
 
         {/* pixel burst */}
-        {animated &&
+        {animated && started &&
           particles.map((p, i) => (
             <motion.span
               key={i}
@@ -198,7 +201,7 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
         )}
 
         {/* "Swapping cards" hint during the swap */}
-        {swap && (
+        {swap && started && (
           <motion.p
             className="pointer-events-none absolute inset-x-0 text-center text-[15px] font-semibold uppercase tracking-[0.2em] text-white/70"
             style={{ top: 'calc(var(--safe-top) + 34px)' }}
@@ -240,11 +243,37 @@ export function ExchangeReveal({ theirs, mine, title, subtitle, fact, still, chi
         onClick={(e) => e.stopPropagation()}
       >
         {subtitle && <p className="text-center text-[16px] font-medium text-white/85">{subtitle}</p>}
-        <div className="flex w-full flex-col gap-3">{children}</div>
+        {/* mounted only after landing, so timers inside (auto-continue) start when the card is visible */}
+        <div className="flex w-full flex-col gap-3">{landed && children}</div>
       </motion.div>
 
+      {/* tap to start: gives the browser the tap it needs before it will play sound */}
+      {!started && (
+        <button
+          type="button"
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-ink px-6 text-white"
+          onClick={(e) => {
+            e.stopPropagation();
+            unlockAudio();
+            setStarted(true);
+          }}
+        >
+          <span className="text-[15px] font-semibold uppercase tracking-[0.2em] text-white/70">{theirs.display_name}'s card is here</span>
+          <span className="float-bob block">
+            <CardBack scale={Math.min(0.5, S)} />
+          </span>
+          <motion.span
+            className="rounded-full bg-lime px-7 py-3.5 text-[18px] font-bold text-ink shadow-[0_5px_0_#9CC21F]"
+            animate={reduce ? {} : { scale: [1, 1.06, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            Tap to swap cards
+          </motion.span>
+        </button>
+      )}
+
       {/* white flash on impact */}
-      {animated && (
+      {animated && started && (
         <motion.div
           className="pointer-events-none absolute inset-0 bg-white"
           initial={{ opacity: 0 }}

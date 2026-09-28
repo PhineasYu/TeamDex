@@ -7,6 +7,7 @@ import { ExchangeReveal } from '../../components/ExchangeReveal';
 import { Pill, PillLink, pillClass, Spinner } from '../../components/ui';
 import { api, type Person } from '../../lib/api';
 import { homeFor, setPendingToken, setSession, useSession } from '../../lib/session';
+import { audioReady, soundEnabled } from '../../lib/sound';
 
 type View =
   | { kind: 'loading' }
@@ -25,6 +26,8 @@ export function CollectPage() {
   const [view, setView] = useState<View>({ kind: 'loading' });
   const ran = useRef<string | null>(null);
   const [autoJoined, setAutoJoined] = useState(false);
+  // Opened straight from the camera: nothing has been tapped yet, so the browser would mute the swap.
+  const [needsTap] = useState(() => soundEnabled() && !audioReady());
 
   useEffect(() => {
     const key = `${token}|${session?.personId ?? ''}`;
@@ -87,6 +90,7 @@ export function CollectPage() {
       <ExchangeReveal
         theirs={person}
         mine={me}
+        gate={needsTap}
         fact={fact}
         still={already}
         title={already ? 'Already in your Teamdex' : 'New card!'}
@@ -101,7 +105,7 @@ export function CollectPage() {
         {partyUnlocked ? (
           <AutoContinue to="/quest/party" label="Your party is unlocked!" icon={<PartyPopper size={18} />} seconds={6} />
         ) : (
-          <AutoContinue to={home} label={me ? `Continue as ${me.display_name}` : 'Go to my Teamdex'} seconds={already ? 0 : 7} />
+          <AutoContinue to={home} label={me ? `Continue as ${me.display_name}` : 'Go to my Teamdex'} seconds={already ? 0 : 6} />
         )}
         <PillLink to={`/quest/card/${person.id}`} variant="light" block>
           Open {person.display_name}'s card

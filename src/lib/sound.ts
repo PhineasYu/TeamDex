@@ -1,6 +1,34 @@
 // Web Audio synthesized effects (no audio files). Fails silently.
 let ac: AudioContext | null = null;
 let master: GainNode | null = null;
+const readySubs = new Set<() => void>();
+
+/** True once the browser lets this page play sound. */
+export function audioReady(): boolean {
+  return !!ac && ac.state === 'running';
+}
+
+export function onAudioReady(cb: () => void): () => void {
+  readySubs.add(cb);
+  return () => readySubs.delete(cb);
+}
+
+function notifyReady() {
+  if (audioReady()) readySubs.forEach((f) => f());
+}
+
+/**
+ * Mobile browsers only start audio inside a real user activation. On touch screens pointerdown does not
+ * count; touchend / click / keydown do. Keep listening until the audio context is actually running.
+ */
+export function installAudioUnlock() {
+  const events = ['touchend', 'click', 'keydown', 'pointerup'] as const;
+  const handler = () => {
+    unlockAudio();
+    if (audioReady()) events.forEach((e) => window.removeEventListener(e, handler, true));
+  };
+  events.forEach((e) => window.addEventListener(e, handler, true));
+}
 
 const PREF = 'teamdex.sound';
 
@@ -37,7 +65,8 @@ export function unlockAudio() {
       master.gain.value = 0.8;
       master.connect(ac.destination);
     }
-    if (ac.state !== 'running') ac.resume().catch(() => {});
+    ac.onstatechange = notifyReady;
+    if (ac.state !== 'running') ac.resume().then(notifyReady).catch(() => {});
     const b = ac.createBuffer(1, 1, 22050);
     const src = ac.createBufferSource();
     src.buffer = b;
