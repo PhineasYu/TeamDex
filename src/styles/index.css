@@ -413,3 +413,22 @@ select {
     animation: none;
   }
 }
+
+/* ---------- in-app QR scanner frame ---------- */
+.scan-holo {
+  padding: 5px;
+  background: conic-gradient(from var(--ang, 0deg), #ff7ab8, #c8f53c, #bdf4e0, #5aafe3, #a86bff, #ff7ab8);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.scan-corner {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 7px solid var(--lime);
+}
+.scan-tl { left: -12px; top: -12px; border-right: 0; border-bottom: 0; border-radius: 24px 0 0 0; }
+.scan-tr { right: -12px; top: -12px; border-left: 0; border-bottom: 0; border-radius: 0 24px 0 0; }
+.scan-bl { left: -12px; bottom: -12px; border-right: 0; border-top: 0; border-radius: 0 0 0 24px; }
+.scan-br { right: -12px; bottom: -12px; border-left: 0; border-top: 0; border-radius: 0 0 24px 0; }

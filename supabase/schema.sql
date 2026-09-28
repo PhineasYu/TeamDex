@@ -365,7 +365,7 @@ declare
   elin uuid := 'a0000000-0000-4000-8000-000000000001';
   patrik uuid := 'a0000000-0000-4000-8000-000000000002';
   maja uuid := 'a0000000-0000-4000-8000-000000000003';
-  johan uuid := 'a0000000-0000-4000-8000-000000000004';
+  alva uuid := 'a0000000-0000-4000-8000-000000000004';
   sara uuid := 'a0000000-0000-4000-8000-000000000005';
   ahmed uuid := 'a0000000-0000-4000-8000-000000000006';
   lina uuid := 'a0000000-0000-4000-8000-000000000007';
@@ -386,8 +386,8 @@ begin
      '{"hair":"#6B3E26","skin":"#F1C6A0","shirt":"#3DDBB0","pants":"#13222E","shoes":"#13222E"}', 2, 'colleague', false, null, 'Ask Patrik how he gets to work in winter', true, 'fk-patrik'),
   (maja,   c, 'Maja',   'Account Executive',  'sales',       '{"clients","demos","pricing questions"}',
      '{"hair":"#2B1D14","skin":"#E8B48A","shirt":"#C8F53C","pants":"#13222E","shoes":"#FF7AB8"}', 3, 'colleague', false, null, 'Ask Maja what she does every Tuesday night', true, 'fk-maja'),
-  (johan,  c, 'Johan',  'People Partner',     'people',      '{"contracts","benefits","how things work here"}',
-     '{"hair":"#D9B38C","skin":"#F6D2B8","shirt":"#FF8A7A","pants":"#13222E","shoes":"#13222E"}', 4, 'colleague', true,  null, 'Ask Johan what he bakes on Fridays', true, 'fk-johan'),
+  (alva,  c, 'Alva',  'People Partner',     'people',      '{"contracts","benefits","how things work here"}',
+     '{"hair":"#D9B38C","skin":"#F6D2B8","shirt":"#FF8A7A","pants":"#13222E","shoes":"#13222E"}', 4, 'colleague', true,  null, 'Ask Alva about Friday baking', true, 'fk-alva'),
   (sara,   c, 'Sara',   'Finance Lead',       'finance',     '{"budgets","invoices","expense reports"}',
      '{"hair":"#13222E","skin":"#C68B59","shirt":"#2FD18A","pants":"#13222E","shoes":"#C8F53C"}', 5, 'colleague', false, null, 'Ask Sara about the strangest race she has run', true, 'fk-sara'),
   (ahmed,  c, 'Ahmed',  'Product Manager',    'product',     '{"the roadmap","priorities","customer feedback"}',
@@ -405,7 +405,7 @@ begin
   (elin,  'Has sketched every plant in the office.',   '{"plant"}'),
   (patrik, 'Skates to work across the lake in winter.', '{"skate","skating","ice"}'),
   (maja,  'Sings in a choir every Tuesday.',           '{"choir","sing"}'),
-  (johan, 'Bakes cinnamon buns every Friday.',         '{"cinnamon","bun","kanelbulle"}'),
+  (alva, 'Bakes cinnamon buns every Friday.',         '{"cinnamon","bun","kanelbulle"}'),
   (sara,  'Has run a marathon in the snow.',           '{"marathon","snow"}'),
   (ahmed, 'Is learning Swedish through ABBA songs.',   '{"abba"}'),
   (lina,  'Her dog has its own office badge.',         '{"badge"}');
@@ -415,7 +415,7 @@ begin
   insert into quest_targets (quest_id, person_id, reason, sort) values
   (q_yunfei, elin,  'Your buddy for week one', 1),
   (q_yunfei, patrik, 'Ask him when the build breaks', 2),
-  (q_yunfei, johan, 'Your People Partner', 3),
+  (q_yunfei, alva, 'Your People Partner', 3),
   (q_yunfei, lina,  'Keys, laptop and room bookings', 4),
   (q_yunfei, sara,  'Expenses and invoices', 5);
 
@@ -425,18 +425,18 @@ begin
   insert into quest_targets (quest_id, person_id, reason, sort) values
   (q_noor, ahmed, 'Your manager', 1),
   (q_noor, maja,  'Understand our clients', 2),
-  (q_noor, johan, 'Your People Partner', 3),
+  (q_noor, alva, 'Your People Partner', 3),
   (q_noor, lina,  'Keys, laptop and room bookings', 4),
   (q_noor, sara,  'Finance data owner', 5);
 
-  foreach t in array array[ahmed, maja, johan, lina, sara] loop
+  foreach t in array array[ahmed, maja, alva, lina, sara] loop
     insert into connections (company_id, collector_id, collected_id, method, created_at)
       values (c, noor, t, 'qr', now() - interval '3 days');
     insert into connections (company_id, collector_id, collected_id, method, created_at)
       values (c, t, noor, 'exchange', now() - interval '3 days');
   end loop;
   update connections set fact_unlocked_at = now() - interval '2 days'
-    where collector_id = noor and collected_id in (ahmed, maja, johan);
+    where collector_id = noor and collected_id in (ahmed, maja, alva);
   insert into quiz_attempts (quest_id, score, total, created_at) values (q_noor, 4, 5, now() - interval '1 day');
   insert into pulse_checks (newcomer_id, day, score, created_at) values
     (noor, 1, 2, now() - interval '4 days'), (noor, 5, 4, now() - interval '1 hour');
@@ -444,7 +444,7 @@ begin
   insert into events (company_id, type, actor_id, target_id, created_at) values
     (c, 'card_collected', noor, ahmed, now() - interval '3 days'),
     (c, 'card_collected', noor, maja,  now() - interval '3 days'),
-    (c, 'fact_unlocked',  noor, johan, now() - interval '2 days'),
+    (c, 'fact_unlocked',  noor, alva, now() - interval '2 days'),
     (c, 'party_unlocked', noor, null,  now() - interval '1 day'),
     (c, 'quest_created',  yunfei, null, now() - interval '1 hour');
 end $$;

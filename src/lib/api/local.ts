@@ -22,7 +22,7 @@ import type {
 } from './types';
 
 const DB_KEY = 'teamdex.db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const CHANNEL = 'teamdex';
 
 interface Secret {

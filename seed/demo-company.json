@@ -93,7 +93,7 @@
     {
       "id": "a0000000-0000-4000-8000-000000000004",
       "company_id": "c0000000-0000-4000-8000-000000000001",
-      "display_name": "Johan",
+      "display_name": "Alva",
       "role_title": "People Partner",
       "department": "people",
       "help_topics": [
@@ -112,11 +112,11 @@
       "kind": "colleague",
       "is_hr": true,
       "start_date": null,
-      "fun_fact_prompt": "Ask Johan what he bakes on Fridays",
+      "fun_fact_prompt": "Ask Alva about Friday baking",
       "open_to_chat": true,
       "card_claimed": true,
       "hidden": false,
-      "qr_token": "fk-johan"
+      "qr_token": "fk-alva"
     },
     {
       "id": "a0000000-0000-4000-8000-000000000005",

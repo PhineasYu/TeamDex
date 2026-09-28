@@ -71,7 +71,7 @@ src/
 | `/hr/team` | TeamList | HR | 团队成员、卡片完成状态、领卡链接、Reset demo |
 | `/hr/impact` | Impact | HR | 成效看板（P1） |
 
-角色判断：`person.kind === 'newcomer'` → `/quest`；`person.is_hr` 且从 "I'm from HR" 进入 → `/hr`；其余 → `/me`。HR 同事（如 Johan）也有自己的卡片，可以在 `/me` 与 `/hr` 之间切换。
+角色判断：`person.kind === 'newcomer'` → `/quest`；`person.is_hr` 且从 "I'm from HR" 进入 → `/hr`；其余 → `/me`。HR 同事（如 Alva）也有自己的卡片，可以在 `/me` 与 `/hr` 之间切换。
 
 底部导航：新人（Teamdex / Quiz / Party），同事（Home / My card），HR（Newcomers / New quest / Team / Impact）。
 

@@ -16,7 +16,7 @@ const DEMO_CODE = 'FIKA24';
 const CAST: { slug: string; name: string; role: Role; blurb: string }[] = [
   { slug: 'yunfei', name: 'Yunfei', role: 'newcomer', blurb: 'The newcomer. Scans cards with the phone camera.' },
   { slug: 'patrik', name: 'Patrik', role: 'colleague', blurb: 'The colleague. Shows his card QR code.' },
-  { slug: 'hr', name: 'Johan', role: 'hr', blurb: 'HR console with live progress.' },
+  { slug: 'hr', name: 'Alva', role: 'hr', blurb: 'HR console with live progress.' },
 ];
 
 async function loadCompany() {

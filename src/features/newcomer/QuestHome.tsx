@@ -1,8 +1,9 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { Camera, Keyboard, PartyPopper } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { Camera, Keyboard, PartyPopper, ScanLine } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../../components/Card';
+import { QRScanner } from '../../components/QRScanner';
 import { PageTransition, TopBar } from '../../components/Shell';
 import { Panel, Pill, PillLink, ProgressBar, SectionTitle, Spinner } from '../../components/ui';
 import type { Person } from '../../lib/api';
@@ -12,6 +13,8 @@ import { useNewcomer } from './useNewcomer';
 export function QuestHome({ session }: { session: Session }) {
   const { data, loading } = useNewcomer(session);
   const [codeOpen, setCodeOpen] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const nav = useNavigate();
   const [params] = useSearchParams();
   const newId = params.get('new');
 
@@ -57,13 +60,18 @@ export function QuestHome({ session }: { session: Session }) {
           </Panel>
         )}
 
-        <Panel color="white" className="mt-[10px] flex items-center gap-3 !py-4">
-          <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-sky text-white">
-            <Camera size={22} />
-          </span>
-          <p className="flex-1 text-[14px] leading-snug">
-            <b>To collect:</b> open your phone camera and scan a colleague's card.
-          </p>
+        <Panel color="white" className="mt-[10px] flex items-center gap-3 !p-3">
+          <button
+            type="button"
+            onClick={() => setScanning(true)}
+            className="flex min-h-[52px] flex-1 items-center gap-3 rounded-full bg-lime py-1.5 pl-1.5 pr-4 text-left font-bold shadow-[0_4px_0_#9CC21F] transition-transform active:translate-y-[2px] active:shadow-[0_2px_0_#9CC21F]"
+          >
+            <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-ink text-lime">
+              <Camera size={22} />
+            </span>
+            <span className="flex-1 text-[16px] leading-tight">Scan a card</span>
+            <ScanLine size={20} />
+          </button>
           <button type="button" onClick={() => setCodeOpen((v) => !v)} className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-paper" aria-label="Enter a code instead">
             <Keyboard size={20} />
           </button>
@@ -85,6 +93,19 @@ export function QuestHome({ session }: { session: Session }) {
         </SectionTitle>
         <CardGrid highlight={newId} items={others.map((person) => ({ person, collected: collected.has(person.id), fact: facts[person.id] }))} />
       </PageTransition>
+      <AnimatePresence>
+        {scanning && (
+          <QRScanner
+            me={me?.avatar}
+            onToken={(token) => nav(`/c/${encodeURIComponent(token)}`)}
+            onClose={() => setScanning(false)}
+            onTypeCode={() => {
+              setScanning(false);
+              setCodeOpen(true);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
