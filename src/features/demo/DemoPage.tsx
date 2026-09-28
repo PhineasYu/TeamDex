@@ -137,7 +137,7 @@ export function DemoPage() {
       <div className="flex flex-col gap-[10px]">
         {CAST.map((c) => {
           const person = byName(c.name);
-          const url = `${base}/demo/${c.slug}`;
+          const url = `${base}/demo/${c.slug}/`;
           return (
             <Panel key={c.slug} color={c.role === 'newcomer' ? 'mint' : c.role === 'colleague' ? 'sky' : 'white'} className="!p-4">
               <div className="flex items-center gap-3">

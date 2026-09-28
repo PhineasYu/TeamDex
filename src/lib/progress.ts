@@ -31,5 +31,5 @@ export function publicBaseUrl(): string {
 }
 
 export function cardUrl(token: string): string {
-  return `${publicBaseUrl()}/c/${token}`;
+  return `${publicBaseUrl()}/c/${token}/`;
 }
