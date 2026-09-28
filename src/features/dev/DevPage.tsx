@@ -19,12 +19,12 @@ export function DevPage() {
   }, []);
 
   if (loading || !data) return <div className="page"><Spinner /></div>;
-  const oskar = data.find((p) => p.display_name === 'Oskar') ?? data[0];
+  const patrik = data.find((p) => p.display_name === 'Patrik') ?? data[0];
   const scale = (Math.min(window.innerWidth, 560) - 32 - 10) / 2 / 360;
 
   if (reveal > 0) {
     return (
-      <ExchangeReveal key={reveal} theirs={oskar} mine={data.find((p) => p.kind === 'newcomer')} title="New card!" subtitle="You swapped cards with Oskar.">
+      <ExchangeReveal key={reveal} theirs={patrik} mine={data.find((p) => p.kind === 'newcomer')} title="New card!" subtitle="You swapped cards with Patrik.">
         <Pill block onClick={() => setReveal((r) => r + 1)}>
           Replay reveal
         </Pill>
@@ -57,18 +57,18 @@ export function DevPage() {
 
       <SectionTitle>Sprites</SectionTitle>
       <Panel color="white" className="flex h-[120px] items-end gap-3">
-        <Sprite avatar={oskar.avatar} style={{ height: 80 }} />
-        <Sprite avatar={oskar.avatar} frame="cheer" style={{ height: 80 }} />
-        <Sprite avatar={oskar.avatar} frame="silhouette" style={{ height: 80 }} />
+        <Sprite avatar={patrik.avatar} style={{ height: 80 }} />
+        <Sprite avatar={patrik.avatar} frame="cheer" style={{ height: 80 }} />
+        <Sprite avatar={patrik.avatar} frame="silhouette" style={{ height: 80 }} />
       </Panel>
 
       <SectionTitle>Card states</SectionTitle>
       <div className="grid grid-cols-2 gap-[10px]">
-        <Card person={oskar} scale={scale} />
-        <Card person={oskar} scale={scale} fact="Skates to work across the lake in winter." />
-        <Card person={oskar} variant="silhouette" reason="Ask him when the build breaks" scale={scale} />
-        <Card person={data.find((p) => !p.card_claimed) ?? oskar} variant="unclaimed" scale={scale} />
-        <Card person={data.find((p) => p.kind === 'newcomer') ?? oskar} scale={scale} />
+        <Card person={patrik} scale={scale} />
+        <Card person={patrik} scale={scale} fact="Skates to work across the lake in winter." />
+        <Card person={patrik} variant="silhouette" reason="Ask him when the build breaks" scale={scale} />
+        <Card person={data.find((p) => !p.card_claimed) ?? patrik} variant="unclaimed" scale={scale} />
+        <Card person={data.find((p) => p.kind === 'newcomer') ?? patrik} scale={scale} />
       </div>
 
       <SectionTitle>Every colleague</SectionTitle>
@@ -80,7 +80,7 @@ export function DevPage() {
 
       <SectionTitle>Big card</SectionTitle>
       <div className="flex justify-center">
-        <Card person={oskar} scale={Math.min(0.9, (Math.min(window.innerWidth, 560) - 32) / 360)} holo />
+        <Card person={patrik} scale={Math.min(0.9, (Math.min(window.innerWidth, 560) - 32) / 360)} holo />
       </div>
 
       <SectionTitle>Panels & progress</SectionTitle>

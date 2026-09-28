@@ -65,6 +65,17 @@ export function ColleagueHome({ session }: { session: Session }) {
           </Panel>
         )}
 
+        <SectionTitle>Newcomer cards you got</SectionTitle>
+        {gotCards.length ? (
+          <div className="grid grid-cols-2 gap-[10px]">
+            {gotCards.map((p) => (
+              <Card key={p!.id} person={p!} scale={scale} />
+            ))}
+          </div>
+        ) : (
+          <p className="rounded-[22px] bg-white px-4 py-4 text-[15px] text-muted">When a newcomer scans your card, you get theirs here.</p>
+        )}
+
         {incoming.length > 0 && (
           <>
             <SectionTitle>New this week</SectionTitle>
@@ -87,17 +98,6 @@ export function ColleagueHome({ session }: { session: Session }) {
               ))}
             </div>
           </>
-        )}
-
-        <SectionTitle>Newcomer cards you got</SectionTitle>
-        {gotCards.length ? (
-          <div className="grid grid-cols-2 gap-[10px]">
-            {gotCards.map((p) => (
-              <Card key={p!.id} person={p!} scale={scale} />
-            ))}
-          </div>
-        ) : (
-          <p className="rounded-[22px] bg-white px-4 py-4 text-[15px] text-muted">When a newcomer scans your card, you get theirs here.</p>
         )}
 
         <SectionTitle right={<Link to="/me/card" className="text-[14px] font-semibold underline underline-offset-4">My card</Link>}>Around the team</SectionTitle>

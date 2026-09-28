@@ -20,3 +20,16 @@ export const DEPT_LABEL: Record<Department, string> = {
   product: 'Product',
   ops: 'Ops',
 };
+
+/** Org chart order and full team names. */
+export const DEPT_ORDER: Department[] = ['people', 'product', 'design', 'engineering', 'sales', 'finance', 'ops'];
+
+export const DEPT_LONG: Record<Department, string> = {
+  people: 'People & HR',
+  product: 'Product',
+  design: 'Design',
+  engineering: 'Engineering',
+  sales: 'Sales',
+  finance: 'Finance',
+  ops: 'Operations & Office',
+};

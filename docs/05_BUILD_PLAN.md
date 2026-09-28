@@ -91,7 +91,7 @@
 ### 检查
 
 - [ ] 以 Yunfei 身份进入，能看到 5 个关键同事剪影和原因
-- [ ] 以 Oskar 身份进入，能看到自己的二维码，能编辑头像并立即生效
+- [ ] 以 Patrik 身份进入，能看到自己的二维码，能编辑头像并立即生效
 - [ ] 以 HR（Johan）身份进入，能看到 Yunfei 的进度 0/5
 - [ ] 在 HR 里点 Reset demo，数据恢复初始状态
 
@@ -112,9 +112,9 @@
 
 ### 检查
 
-- [ ] 电脑上打开 Oskar 的 MyCard，用手机相机扫码 → 手机打开链接 → 选择 Yunfei → 自动回到收集并播放揭晓
+- [ ] 电脑上打开 Patrik 的 MyCard，用手机相机扫码 → 手机打开链接 → 选择 Yunfei → 自动回到收集并播放揭晓
 - [ ] 再扫一次显示 "Already in your Teamdex"
-- [ ] 在详情页输入 "skate" 解锁 Oskar 的 fun fact
+- [ ] 在详情页输入 "skate" 解锁 Patrik 的 fun fact
 
 ---
 
@@ -138,7 +138,7 @@
 
 ### 检查
 
-- [ ] 手机 A 以 Oskar 身份打开 MyCard；手机 B 以 Yunfei 身份扫码
+- [ ] 手机 A 以 Patrik 身份打开 MyCard；手机 B 以 Yunfei 身份扫码
 - [ ] 5 秒内手机 A 弹出 "Yunfei collected your card…"
 - [ ] HR 页面动态流实时出现这条事件
 - [ ] fun fact 答错提示 "Not quite"，答对解锁
@@ -190,19 +190,19 @@ Party 解锁时关键同事收到通知。
 |---|---|---|
 | 0:00 | 播放 pitch 影片前半段（到 Logo） | 我自己的实习经历：不敢去找同事 |
 | 0:45 | 切到现场演示，投屏 HR 页面 | HR 给新人创建任务，指定 5 位关键同事 |
-| 1:10 | 请一位评委拿着"Oskar"的手机（或亮出打印卡），你用新人手机扫码 | 扫码的一秒：卡片揭晓；评委手机弹出通知 |
+| 1:10 | 请一位评委拿着"Patrik"的手机（或亮出打印卡），你用新人手机扫码 | 扫码的一秒：卡片揭晓；评委手机弹出通知 |
 | 1:40 | 当场问评委 fun fact，输入答案解锁 | 只有当面聊天才能解锁 |
 | 2:00 | 快速切到已集齐的演示账号，展示 Party | 第一周以被欢迎结束 |
 | 2:20 | 回到 HR 成效页 | HR 第一次能看到"融入"的进度 |
 | 2:40 | 收尾 | Uniplay teaches the company. Teamdex introduces the people. 同一套机制可以成为 Uniplay 的新模板 |
 
-演示前准备：先 Reset demo，再用 Yunfei 收集 4 位关键同事，把第 5 位（例如 Oskar）留到现场扫码，扫完直接触发 party。Noor 是已集齐的备用账号，现场出问题时切换到她展示 party 与 HR 数据。
+演示前准备：先 Reset demo，再用 Yunfei 收集 4 位关键同事，把第 5 位（例如 Patrik）留到现场扫码，扫完直接触发 party。Noor 是已集齐的备用账号，现场出问题时切换到她展示 party 与 HR 数据。
 
 ## 兜底方案
 
 | 问题 | 兜底 |
 |---|---|
 | 会场 Wi-Fi 不稳 | 用手机热点；提前在两部手机上打开页面 |
-| Supabase 没跑通 | `VITE_DATA_MODE=local`，在一台电脑上开两个标签页（Oskar 与 Yunfei），用手机扫电脑屏幕上的码 |
+| Supabase 没跑通 | `VITE_DATA_MODE=local`，在一台电脑上开两个标签页（Patrik 与 Yunfei），用手机扫电脑屏幕上的码 |
 | 扫码失败 | MyCard 下方显示 6 位短码，新人可手动输入（P1，如有时间） |
 | 一切都坏了 | 播放完整 pitch 影片 + 已部署版本的截图 |

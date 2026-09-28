@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { useAnimate } from 'framer-motion';
 import { ArrowLeft, MessageCircle, Sparkles } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ export function CardDetail({ session }: { session: Session }) {
   const [msg, setMsg] = useState<{ tone: 'error' | 'ok'; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
-  const [shakeKey, setShakeKey] = useState(0);
+  const [formRef, animateForm] = useAnimate<HTMLFormElement>();
   const cardRef = useRef<HTMLDivElement>(null);
 
   const person = data?.people.find((p) => p.id === personId);
@@ -82,7 +82,7 @@ export function CardDetail({ session }: { session: Session }) {
                 ? `${person.display_name} hasn't added a fun fact yet.`
                 : 'Collect this card first.';
         setMsg({ tone: 'error', text });
-        setShakeKey((k) => k + 1);
+        if (formRef.current) animateForm(formRef.current, { x: [0, -8, 8, -6, 6, 0] }, { duration: 0.35 });
         play('wrong');
       }
     } catch {
@@ -155,17 +155,14 @@ export function CardDetail({ session }: { session: Session }) {
             ) : person.fun_fact_prompt ? (
               <>
                 <p className="text-[16px] font-medium">{promptLine(person)}</p>
-                <motion.form
-                  key={shakeKey}
-                  onSubmit={submit}
-                  className="mt-3 flex gap-2"
-                  animate={shakeKey ? { x: [0, -8, 8, -6, 6, 0] } : {}}
-                  transition={{ duration: 0.35 }}
-                >
+                <form ref={formRef} onSubmit={submit} className="mt-3 flex gap-2">
                   <input
                     value={guess}
                     onChange={(e) => setGuess(e.target.value)}
                     placeholder="What did they say?"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
                     autoCapitalize="none"
                     className="h-12 min-w-0 flex-1 rounded-full border-[1.5px] border-transparent bg-white px-5 focus:border-ink focus:outline-none"
                     aria-label="What did they say?"
@@ -173,7 +170,7 @@ export function CardDetail({ session }: { session: Session }) {
                   <Pill type="submit" disabled={busy || !guess.trim()}>
                     Unlock
                   </Pill>
-                </motion.form>
+                </form>
               </>
             ) : (
               <p className="text-[15px]">{person.display_name} hasn't added a fun fact yet. Ask them anything!</p>

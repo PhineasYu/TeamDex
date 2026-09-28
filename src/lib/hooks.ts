@@ -38,6 +38,15 @@ export function useData<T>(fn: () => Promise<T>, deps: unknown[]) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
+  // Phones pause background tabs and can drop realtime messages; refresh when the page comes back.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') load(true);
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [load]);
+
   const reload = useCallback(() => load(true), [load]);
   return { data, error, loading: loading && data === undefined, reload, setData };
 }

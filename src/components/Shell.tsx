@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { BarChart3, CreditCard, Home, LayoutGrid, Layers, PartyPopper, Plus, HelpCircle, Users, X, Volume2, VolumeX, Repeat, Briefcase, IdCard } from 'lucide-react';
+import { Network, BarChart3, CreditCard, Home, LayoutGrid, Layers, PartyPopper, Plus, HelpCircle, Users, X, Volume2, VolumeX, Repeat, Briefcase, IdCard } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { api, dataMode, type Person } from '../lib/api';
@@ -19,12 +19,14 @@ interface NavItem {
 const NAV: Record<Role, NavItem[]> = {
   newcomer: [
     { to: '/quest', label: 'Teamdex', icon: LayoutGrid, end: true },
+    { to: '/quest/org', label: 'Org chart', icon: Network },
     { to: '/quest/quiz', label: 'Quiz', icon: HelpCircle },
     { to: '/quest/party', label: 'Party', icon: PartyPopper },
   ],
   colleague: [
     { to: '/me', label: 'Home', icon: Home, end: true },
     { to: '/me/card', label: 'My card', icon: CreditCard },
+    { to: '/me/org', label: 'Org chart', icon: Network },
   ],
   hr: [
     { to: '/hr', label: 'Newcomers', icon: Layers, end: true },

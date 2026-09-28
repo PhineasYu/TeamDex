@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Camera, Keyboard, PartyPopper } from 'lucide-react';
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { PageTransition, TopBar } from '../../components/Shell';
 import { Panel, Pill, PillLink, ProgressBar, SectionTitle, Spinner } from '../../components/ui';
@@ -12,6 +12,8 @@ import { useNewcomer } from './useNewcomer';
 export function QuestHome({ session }: { session: Session }) {
   const { data, loading } = useNewcomer(session);
   const [codeOpen, setCodeOpen] = useState(false);
+  const [params] = useSearchParams();
+  const newId = params.get('new');
 
   if (loading || !data) return <div className="page"><Spinner /></div>;
   const { me, people, quest, facts, collected, progress } = data;
@@ -36,7 +38,7 @@ export function QuestHome({ session }: { session: Session }) {
               <span className="text-[17px] font-bold">
                 {progress.done} of {progress.goal} key colleagues
               </span>
-              <span className="text-[13px] font-semibold text-muted">{collectedCount} cards total</span>
+              <span className="text-[13px] font-semibold text-muted">{collectedCount} {collectedCount === 1 ? "card" : "cards"} total</span>
             </div>
             <ProgressBar value={progress.done} max={progress.goal} label={`${progress.done} of ${progress.goal}`} />
             {quest.party_unlocked_at ? (
@@ -72,6 +74,7 @@ export function QuestHome({ session }: { session: Session }) {
           <>
             <SectionTitle>Key colleagues</SectionTitle>
             <CardGrid
+              highlight={newId}
               items={keyPeople.map(({ person, reason }) => ({ person, reason, collected: collected.has(person.id), fact: facts[person.id] }))}
             />
           </>
@@ -80,14 +83,20 @@ export function QuestHome({ session }: { session: Session }) {
         <SectionTitle right={<Link to="/quest/quiz" className="text-[14px] font-semibold underline underline-offset-4">Quiz</Link>}>
           Everyone else
         </SectionTitle>
-        <CardGrid items={others.map((person) => ({ person, collected: collected.has(person.id), fact: facts[person.id] }))} />
+        <CardGrid highlight={newId} items={others.map((person) => ({ person, collected: collected.has(person.id), fact: facts[person.id] }))} />
       </PageTransition>
     </div>
   );
 }
 
-function CardGrid({ items }: { items: { person: Person; reason?: string; collected: boolean; fact?: string }[] }) {
+function CardGrid({ items, highlight }: { items: { person: Person; reason?: string; collected: boolean; fact?: string }[]; highlight?: string | null }) {
   const reduce = useReducedMotion();
+  // Scroll the card that was just collected into view
+  useEffect(() => {
+    if (!highlight) return;
+    const t = setTimeout(() => document.getElementById(`card-${highlight}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 450);
+    return () => clearTimeout(t);
+  }, [highlight]);
   const scale = (Math.min(window.innerWidth, 560) - 32 - 10) / 2 / 360;
   return (
     <div className="grid grid-cols-2 gap-[10px]">
@@ -96,6 +105,8 @@ function CardGrid({ items }: { items: { person: Person; reason?: string; collect
         return (
           <motion.div
             key={person.id}
+            id={`card-${person.id}`}
+            className="relative"
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1], delay: Math.min(i, 8) * 0.04 }}
@@ -103,6 +114,18 @@ function CardGrid({ items }: { items: { person: Person; reason?: string; collect
             <Link to={`/quest/card/${person.id}`} className="block transition-transform active:scale-[.97]" aria-label={`${person.display_name}${collected ? '' : ', not collected yet'}`}>
               <Card person={person} variant={variant} reason={reason} fact={fact} scale={scale} />
             </Link>
+            {highlight === person.id && collected && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute -inset-1.5 rounded-[22px] border-[3px] border-lime"
+                initial={{ opacity: 0 }}
+                animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 0.4, 1, 0.4, 1], scale: [0.96, 1.02, 1, 1.02, 1, 1] }}
+                transition={{ duration: 2.2, delay: 0.5 }}
+              />
+            )}
+            {highlight === person.id && collected && (
+              <span className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 rounded-full bg-lime px-2.5 py-0.5 text-[12px] font-extrabold shadow">Just added</span>
+            )}
             {!collected && person.card_claimed && person.open_to_chat && (
               <div className="mt-1.5 flex items-center gap-1.5 pl-2 text-[12px] font-semibold text-muted">
                 <span className="h-2 w-2 rounded-full bg-success" /> Open to chat

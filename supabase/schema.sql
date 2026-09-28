@@ -363,7 +363,7 @@ returns void language plpgsql security definer set search_path = public as $$
 declare
   c uuid := 'c0000000-0000-4000-8000-000000000001';
   elin uuid := 'a0000000-0000-4000-8000-000000000001';
-  oskar uuid := 'a0000000-0000-4000-8000-000000000002';
+  patrik uuid := 'a0000000-0000-4000-8000-000000000002';
   maja uuid := 'a0000000-0000-4000-8000-000000000003';
   johan uuid := 'a0000000-0000-4000-8000-000000000004';
   sara uuid := 'a0000000-0000-4000-8000-000000000005';
@@ -382,8 +382,8 @@ begin
   insert into people (id, company_id, display_name, role_title, department, help_topics, avatar, card_no, kind, is_hr, start_date, fun_fact_prompt, card_claimed, qr_token) values
   (elin,   c, 'Elin',   'Product Designer',   'design',      '{"user flows","Figma files","the best fika spot"}',
      '{"hair":"#F2C14E","skin":"#F6D2B8","shirt":"#FF7AB8","pants":"#13222E","shoes":"#5AAFE3"}', 1, 'colleague', false, null, 'Ask Elin what she sketches in meetings', true, 'fk-elin'),
-  (oskar,  c, 'Oskar',  'Backend Engineer',   'engineering', '{"APIs","servers","why the build is red"}',
-     '{"hair":"#6B3E26","skin":"#F1C6A0","shirt":"#3DDBB0","pants":"#13222E","shoes":"#13222E"}', 2, 'colleague', false, null, 'Ask Oskar how he gets to work in winter', true, 'fk-oskar'),
+  (patrik,  c, 'Patrik',  'Backend Engineer',   'engineering', '{"APIs","servers","why the build is red"}',
+     '{"hair":"#6B3E26","skin":"#F1C6A0","shirt":"#3DDBB0","pants":"#13222E","shoes":"#13222E"}', 2, 'colleague', false, null, 'Ask Patrik how he gets to work in winter', true, 'fk-patrik'),
   (maja,   c, 'Maja',   'Account Executive',  'sales',       '{"clients","demos","pricing questions"}',
      '{"hair":"#2B1D14","skin":"#E8B48A","shirt":"#C8F53C","pants":"#13222E","shoes":"#FF7AB8"}', 3, 'colleague', false, null, 'Ask Maja what she does every Tuesday night', true, 'fk-maja'),
   (johan,  c, 'Johan',  'People Partner',     'people',      '{"contracts","benefits","how things work here"}',
@@ -403,7 +403,7 @@ begin
 
   insert into person_secrets (person_id, fun_fact_text, answer_keywords) values
   (elin,  'Has sketched every plant in the office.',   '{"plant"}'),
-  (oskar, 'Skates to work across the lake in winter.', '{"skate","skating","ice"}'),
+  (patrik, 'Skates to work across the lake in winter.', '{"skate","skating","ice"}'),
   (maja,  'Sings in a choir every Tuesday.',           '{"choir","sing"}'),
   (johan, 'Bakes cinnamon buns every Friday.',         '{"cinnamon","bun","kanelbulle"}'),
   (sara,  'Has run a marathon in the snow.',           '{"marathon","snow"}'),
@@ -414,7 +414,7 @@ begin
   insert into quests (id, company_id, newcomer_id, party_goal) values (q_yunfei, c, yunfei, 5);
   insert into quest_targets (quest_id, person_id, reason, sort) values
   (q_yunfei, elin,  'Your buddy for week one', 1),
-  (q_yunfei, oskar, 'Ask him when the build breaks', 2),
+  (q_yunfei, patrik, 'Ask him when the build breaks', 2),
   (q_yunfei, johan, 'Your People Partner', 3),
   (q_yunfei, lina,  'Keys, laptop and room bookings', 4),
   (q_yunfei, sara,  'Expenses and invoices', 5);

@@ -17,6 +17,7 @@ import { CardDetail } from './features/newcomer/CardDetail';
 import { Party } from './features/newcomer/Party';
 import { QuestHome } from './features/newcomer/QuestHome';
 import { Quiz } from './features/newcomer/Quiz';
+import { OrgPage } from './features/org/OrgPage';
 import { useSession } from './lib/session';
 
 function Nav() {
@@ -44,11 +45,13 @@ export default function App() {
 
           <Route path="/quest" element={<RoleGate allow={['newcomer']}>{(s) => <QuestHome session={s} />}</RoleGate>} />
           <Route path="/quest/card/:personId" element={<RoleGate allow={['newcomer']}>{(s) => <CardDetail session={s} />}</RoleGate>} />
+          <Route path="/quest/org" element={<RoleGate allow={['newcomer']}>{(s) => <OrgPage session={s} />}</RoleGate>} />
           <Route path="/quest/quiz" element={<RoleGate allow={['newcomer']}>{(s) => <Quiz session={s} />}</RoleGate>} />
           <Route path="/quest/party" element={<RoleGate allow={['newcomer']}>{(s) => <Party session={s} />}</RoleGate>} />
 
           <Route path="/me" element={<RoleGate allow={['colleague', 'hr']}>{(s) => <ColleagueHome session={s} />}</RoleGate>} />
           <Route path="/me/card" element={<RoleGate allow={['colleague', 'hr']}>{(s) => <MyCard session={s} />}</RoleGate>} />
+          <Route path="/me/org" element={<RoleGate allow={['colleague', 'hr']}>{(s) => <OrgPage session={s} />}</RoleGate>} />
           <Route path="/me/edit" element={<RoleGate allow={['colleague', 'hr']}>{(s) => <EditCard session={s} />}</RoleGate>} />
 
           <Route path="/hr" element={<RoleGate allow={['hr']}>{(s) => <HrHome session={s} />}</RoleGate>} />

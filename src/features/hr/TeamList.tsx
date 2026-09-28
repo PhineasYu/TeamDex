@@ -1,8 +1,8 @@
-import { RotateCcw, UserPlus } from 'lucide-react';
+import { Network, RotateCcw, UserPlus } from 'lucide-react';
 import { useState } from 'react';
 import { PageTransition, TopBar } from '../../components/Shell';
 import { useToast } from '../../components/Toast';
-import { AvatarBubble, Panel, Pill, ProgressBar, SectionTitle, Spinner } from '../../components/ui';
+import { AvatarBubble, Panel, Pill, PillLink, ProgressBar, SectionTitle, Spinner } from '../../components/ui';
 import { api, DEPARTMENTS, type Department } from '../../lib/api';
 import { DEPT_LABEL } from '../../lib/departments';
 import { publicBaseUrl } from '../../lib/progress';
@@ -61,6 +61,9 @@ export function TeamList({ session }: { session: Session }) {
           <p className="mt-2 break-all rounded-xl bg-white/70 px-3 py-2 font-mono text-[13px]">{claimUrl}</p>
           <CopyButton text={claimUrl} />
         </Panel>
+        <PillLink to="/me/org" variant="secondary" block className="mt-[10px]">
+          <Network size={18} /> Open the org chart
+        </PillLink>
 
         <SectionTitle
           right={

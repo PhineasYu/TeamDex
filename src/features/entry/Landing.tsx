@@ -9,7 +9,7 @@ import type { Person } from '../../lib/api';
 import { homeFor, useSession } from '../../lib/session';
 import { unlockAudio } from '../../lib/sound';
 
-const FAN = ['Elin', 'Oskar', 'Maja'].map((n) => seed.people.find((p) => p.display_name === n) as unknown as Person);
+const FAN = ['Elin', 'Patrik', 'Maja'].map((n) => seed.people.find((p) => p.display_name === n) as unknown as Person);
 
 export function Landing() {
   const session = useSession();

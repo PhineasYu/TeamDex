@@ -37,7 +37,7 @@
     {
       "id": "a0000000-0000-4000-8000-000000000002",
       "company_id": "c0000000-0000-4000-8000-000000000001",
-      "display_name": "Oskar",
+      "display_name": "Patrik",
       "role_title": "Backend Engineer",
       "department": "engineering",
       "help_topics": [
@@ -56,11 +56,11 @@
       "kind": "colleague",
       "is_hr": false,
       "start_date": null,
-      "fun_fact_prompt": "Ask Oskar how he gets to work in winter",
+      "fun_fact_prompt": "Ask Patrik how he gets to work in winter",
       "open_to_chat": true,
       "card_claimed": true,
       "hidden": false,
-      "qr_token": "fk-oskar"
+      "qr_token": "fk-patrik"
     },
     {
       "id": "a0000000-0000-4000-8000-000000000003",

@@ -1,11 +1,12 @@
-import { PartyPopper } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, PartyPopper } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { ExchangeReveal } from '../../components/ExchangeReveal';
-import { Pill, PillLink, Spinner } from '../../components/ui';
+import { Pill, PillLink, pillClass, Spinner } from '../../components/ui';
 import { api, type Person } from '../../lib/api';
-import { homeFor, setPendingToken, useSession } from '../../lib/session';
+import { homeFor, setPendingToken, setSession, useSession } from '../../lib/session';
 import { play } from '../../lib/sound';
 
 type View =
@@ -24,6 +25,7 @@ export function CollectPage() {
   const nav = useNavigate();
   const [view, setView] = useState<View>({ kind: 'loading' });
   const ran = useRef<string | null>(null);
+  const [autoJoined, setAutoJoined] = useState(false);
 
   useEffect(() => {
     const key = `${token}|${session?.personId ?? ''}`;
@@ -32,13 +34,19 @@ export function CollectPage() {
 
     (async () => {
       try {
-        // 1. No identity yet: preview the card, then send them to pick who they are.
+        // 1. No identity yet (a friend scanning with the phone camera). For the demo we sign them in
+        //    as the company's current newcomer so the swap plays straight away; they can switch after.
         if (!session) {
           const person = await api.getPersonByToken(token);
           if (!person) return setView({ kind: 'unavailable' });
           const company = await api.getCompany(person.company_id);
           if (!company) return setView({ kind: 'unavailable' });
-          return setView({ kind: 'join', person, joinCode: company.join_code });
+          const newcomer = await pickDemoNewcomer(company.id, person.id);
+          if (!newcomer) return setView({ kind: 'join', person, joinCode: company.join_code });
+          setAutoJoined(true);
+          // Changing the session re-runs this effect, which then collects as the newcomer.
+          setSession({ companyId: company.id, joinCode: company.join_code, personId: newcomer.id, role: 'newcomer' });
+          return;
         }
 
         // Colleagues and HR can look but not collect.
@@ -53,7 +61,6 @@ export function CollectPage() {
         const [res, me] = await Promise.all([api.collectCard(session.personId, token), api.getPerson(session.personId)]);
         if (!res.ok) {
           if (res.error === 'own_card') {
-            const me = await api.getPerson(session.personId);
             return me ? setView({ kind: 'own', person: me }) : setView({ kind: 'unavailable' });
           }
           return setView({ kind: 'unavailable' });
@@ -76,6 +83,7 @@ export function CollectPage() {
 
   if (view.kind === 'collected') {
     const { person, me, already, partyUnlocked, fact } = view;
+    const home = `/quest?new=${person.id}`;
     return (
       <ExchangeReveal
         theirs={person}
@@ -83,9 +91,15 @@ export function CollectPage() {
         fact={fact}
         still={already}
         title={already ? 'Already in your Teamdex' : 'New card!'}
-        subtitle={already ? 'Drag the card to tilt it.' : `You swapped cards with ${person.display_name}.`}
+        subtitle={
+          already
+            ? 'Drag the card to tilt it.'
+            : autoJoined && me
+              ? `Welcome, ${me.display_name}! You swapped cards with ${person.display_name}.`
+              : `You swapped cards with ${person.display_name}.`
+        }
       >
-        {partyUnlocked && (
+        {partyUnlocked ? (
           <Pill
             block
             onClick={() => {
@@ -95,13 +109,25 @@ export function CollectPage() {
           >
             <PartyPopper size={18} /> Your party is unlocked!
           </Pill>
+        ) : (
+          <AutoContinue to={home} label={me ? `Continue as ${me.display_name}` : 'Go to my Teamdex'} seconds={already ? 0 : 7} />
         )}
-        <PillLink to={`/quest/card/${person.id}`} variant={partyUnlocked ? 'light' : 'primary'} block>
-          Open card
+        <PillLink to={`/quest/card/${person.id}`} variant="light" block>
+          Open {person.display_name}'s card
         </PillLink>
-        <PillLink to="/quest" variant="light" block>
-          Back to my Teamdex
-        </PillLink>
+        {autoJoined && me && (
+          <button
+            type="button"
+            className="min-h-[44px] text-[14px] font-medium text-white/70 underline underline-offset-4"
+            onClick={() => {
+              setSession(null);
+              setPendingToken(token);
+              nav(`/join/${session?.joinCode ?? ''}`);
+            }}
+          >
+            Not {me.display_name}? Switch
+          </button>
+        )}
       </ExchangeReveal>
     );
   }
@@ -166,5 +192,52 @@ function Frame({ title, person, note, children }: { title: string; person: Perso
       </div>
       <div className="mt-6 flex w-full max-w-[360px] flex-col gap-3">{children}</div>
     </div>
+  );
+}
+
+/** The newcomer with the most recent unfinished quest (Yunfei in the demo data). */
+async function pickDemoNewcomer(companyId: string, scannedId: string): Promise<Person | null> {
+  const [people, quests] = await Promise.all([api.listPeople(companyId), api.listQuests(companyId)]);
+  const newcomers = people.filter((p) => p.kind === 'newcomer' && p.id !== scannedId);
+  const open = quests
+    .filter((q) => !q.party_unlocked_at)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .map((q) => newcomers.find((n) => n.id === q.newcomer_id))
+    .find((n) => !!n);
+  return open ?? newcomers[0] ?? null;
+}
+
+/** Primary button that fills up and continues on its own, unless the user interacts first. */
+function AutoContinue({ to, label, seconds }: { to: string; label: string; seconds: number }) {
+  const nav = useNavigate();
+  const [cancelled, setCancelled] = useState(seconds === 0);
+
+  useEffect(() => {
+    if (cancelled) return;
+    const stop = () => setCancelled(true);
+    const t = setTimeout(() => nav(to), seconds * 1000);
+    // Touching the card (to tilt it) means they want to look a bit longer
+    window.addEventListener('pointerdown', stop, { once: true });
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('pointerdown', stop);
+    };
+  }, [cancelled, nav, to, seconds]);
+
+  return (
+    <button type="button" onClick={() => nav(to)} className={pillClass('primary', 'relative w-full overflow-hidden')}>
+      {!cancelled && (
+        <motion.span
+          aria-hidden
+          className="absolute inset-y-0 left-0 bg-[#B4E02A]"
+          initial={{ width: '0%' }}
+          animate={{ width: '100%' }}
+          transition={{ duration: seconds, ease: 'linear' }}
+        />
+      )}
+      <span className="relative flex items-center gap-2">
+        {label} <ArrowRight size={18} />
+      </span>
+    </button>
   );
 }
