@@ -145,6 +145,21 @@ function AccountSheet({ me, onClose }: { me: Person; onClose: () => void }) {
           <Pill variant="dark" block onClick={switchIdentity}>
             <Repeat size={18} /> Switch identity
           </Pill>
+          <div className="mt-1 flex gap-2">
+            <Pill
+              variant="secondary"
+              className="flex-1 !min-h-[44px] text-[14px]"
+              onClick={() => {
+                setSession(null);
+                nav('/');
+              }}
+            >
+              Start over
+            </Pill>
+            <Pill variant="secondary" className="flex-1 !min-h-[44px] text-[14px]" onClick={() => nav('/demo')}>
+              Demo control
+            </Pill>
+          </div>
         </div>
         <p className="mt-4 text-center text-[12px] text-muted">Demo build · {dataMode === 'local' ? 'local data on this device' : 'live data'}</p>
       </motion.div>

@@ -7,7 +7,6 @@ import { ExchangeReveal } from '../../components/ExchangeReveal';
 import { Pill, PillLink, pillClass, Spinner } from '../../components/ui';
 import { api, type Person } from '../../lib/api';
 import { homeFor, setPendingToken, setSession, useSession } from '../../lib/session';
-import { play } from '../../lib/sound';
 
 type View =
   | { kind: 'loading' }
@@ -100,15 +99,7 @@ export function CollectPage() {
         }
       >
         {partyUnlocked ? (
-          <Pill
-            block
-            onClick={() => {
-              play('party');
-              nav('/quest/party');
-            }}
-          >
-            <PartyPopper size={18} /> Your party is unlocked!
-          </Pill>
+          <AutoContinue to="/quest/party" label="Your party is unlocked!" icon={<PartyPopper size={18} />} seconds={6} />
         ) : (
           <AutoContinue to={home} label={me ? `Continue as ${me.display_name}` : 'Go to my Teamdex'} seconds={already ? 0 : 7} />
         )}
@@ -208,7 +199,7 @@ async function pickDemoNewcomer(companyId: string, scannedId: string): Promise<P
 }
 
 /** Primary button that fills up and continues on its own, unless the user interacts first. */
-function AutoContinue({ to, label, seconds }: { to: string; label: string; seconds: number }) {
+function AutoContinue({ to, label, seconds, icon }: { to: string; label: string; seconds: number; icon?: React.ReactNode }) {
   const nav = useNavigate();
   const [cancelled, setCancelled] = useState(seconds === 0);
 
@@ -236,7 +227,8 @@ function AutoContinue({ to, label, seconds }: { to: string; label: string; secon
         />
       )}
       <span className="relative flex items-center gap-2">
-        {label} <ArrowRight size={18} />
+        {icon}
+        {label} {!icon && <ArrowRight size={18} />}
       </span>
     </button>
   );

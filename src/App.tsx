@@ -6,6 +6,7 @@ import { ColleagueHome } from './features/colleague/ColleagueHome';
 import { EditCard } from './features/colleague/EditCard';
 import { MyCard } from './features/colleague/MyCard';
 import { CollectPage } from './features/collect/CollectPage';
+import { DemoLogin, DemoPage } from './features/demo/DemoPage';
 import { DevPage } from './features/dev/DevPage';
 import { JoinPick } from './features/entry/JoinPick';
 import { Landing } from './features/entry/Landing';
@@ -42,6 +43,8 @@ export default function App() {
           <Route path="/join/:code" element={<JoinPick />} />
           <Route path="/c/:token" element={<CollectPage />} />
           <Route path="/dev" element={<DevPage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          <Route path="/demo/:who" element={<DemoLogin />} />
 
           <Route path="/quest" element={<RoleGate allow={['newcomer']}>{(s) => <QuestHome session={s} />}</RoleGate>} />
           <Route path="/quest/card/:personId" element={<RoleGate allow={['newcomer']}>{(s) => <CardDetail session={s} />}</RoleGate>} />
