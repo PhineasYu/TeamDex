@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft, MessageCircle, Sparkles } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { PageTransition } from '../../components/Shell';
@@ -33,6 +33,7 @@ export function CardDetail({ session }: { session: Session }) {
   const [busy, setBusy] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const person = data?.people.find((p) => p.id === personId);
   const lines = useMemo(() => (person ? openers(person, data?.me ?? null) : []), [person, data?.me]);
@@ -65,6 +66,8 @@ export function CardDetail({ session }: { session: Session }) {
         setJustUnlocked(true);
         setMsg({ tone: 'ok', text: 'Unlocked!' });
         setGuess('');
+        // Bring the card into view so the lock opening is seen
+        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => {
           play('unlock');
           vibrate(30);
@@ -95,6 +98,7 @@ export function CardDetail({ session }: { session: Session }) {
         <BackLink />
         <div className="flex justify-center">
           <Card
+            ref={cardRef}
             person={person}
             variant={variant}
             reason={reason}

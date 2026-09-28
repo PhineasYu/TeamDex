@@ -42,7 +42,7 @@ export function HrHome({ session }: { session: Session }) {
                     <p className="text-[18px] font-bold leading-tight">{n.display_name}</p>
                     <p className="truncate text-[14px] text-muted">
                       {n.role_title}
-                      {n.start_date ? ` · starts ${new Date(n.start_date + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}` : ''}
+                      {n.start_date ? ` · ${new Date(n.start_date + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}` : ''}
                     </p>
                   </div>
                   {complete && (

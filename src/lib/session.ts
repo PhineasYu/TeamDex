@@ -17,9 +17,11 @@ const subs = new Set<() => void>();
 
 let cached: Session | null = read();
 
+// Each tab keeps its own identity (sessionStorage) so two tabs can act as two phones;
+// new tabs, e.g. opened by the camera from a QR code, fall back to the last identity on this device.
 function read(): Session | null {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = sessionStorage.getItem(KEY) ?? localStorage.getItem(KEY);
     return raw ? (JSON.parse(raw) as Session) : null;
   } catch {
     return null;
@@ -33,8 +35,13 @@ export function getSession(): Session | null {
 export function setSession(s: Session | null) {
   cached = s;
   try {
-    if (s) localStorage.setItem(KEY, JSON.stringify(s));
-    else localStorage.removeItem(KEY);
+    if (s) {
+      sessionStorage.setItem(KEY, JSON.stringify(s));
+      localStorage.setItem(KEY, JSON.stringify(s));
+    } else {
+      sessionStorage.removeItem(KEY);
+      localStorage.removeItem(KEY);
+    }
   } catch {
     /* private mode: keep in memory */
   }

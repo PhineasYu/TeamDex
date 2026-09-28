@@ -92,7 +92,7 @@ export function CollectPage() {
               nav('/quest/party');
             }}
           >
-            <PartyPopper size={18} /> Your onboarding party is unlocked!
+            <PartyPopper size={18} /> Your party is unlocked!
           </Pill>
         )}
         <PillLink to={`/quest/card/${person.id}`} variant={partyUnlocked ? 'dark' : 'primary'} block>

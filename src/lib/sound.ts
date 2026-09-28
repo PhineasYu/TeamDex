@@ -91,6 +91,9 @@ export function play(k: Sfx) {
 
 export function vibrate(ms = 40) {
   try {
+    // Chrome logs an error if vibrate is called before the user has tapped the page
+    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
+    if (ua && !ua.hasBeenActive) return;
     if (soundEnabled() && 'vibrate' in navigator) navigator.vibrate(ms);
   } catch {
     /* ignore */

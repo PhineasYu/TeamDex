@@ -3,12 +3,13 @@ import { motion } from 'framer-motion';
 /** Padlock from the pitch film. The shackle swings open when unlocked. */
 export function Lock({ open, size = 24 }: { open: boolean; size?: number }) {
   return (
+    <span style={{ display: 'inline-flex', flex: 'none', color: open ? '#3DDBB0' : '#9AA8A2', transition: 'color .2s .42s' }}>
     <motion.svg
       viewBox="0 0 24 24"
       width={size}
       height={size}
       aria-hidden
-      style={{ flex: 'none', color: open ? '#3DDBB0' : '#9AA8A2', overflow: 'visible' }}
+      style={{ overflow: 'visible' }}
       initial={false}
       // Shake three times, then the shackle swings open
       animate={open ? { x: [0, -3, 3, -3, 3, -3, 3, 0] } : { x: 0 }}
@@ -26,5 +27,6 @@ export function Lock({ open, size = 24 }: { open: boolean; size?: number }) {
       />
       <rect x="5" y="10.5" width="14" height="11" rx="3" fill="currentColor" />
     </motion.svg>
+    </span>
   );
 }

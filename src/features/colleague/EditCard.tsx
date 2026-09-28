@@ -193,9 +193,9 @@ function Field({ label, children, className = '' }: { label: string; children: R
 
 function Swatches({ label, options, value, onChange }: { label: string; options: string[]; value: string; onChange: (v: string) => void }) {
   return (
-    <div className="mb-2 flex items-center gap-2">
-      <span className="w-12 flex-none text-[13px] font-semibold text-muted">{label}</span>
-      <div className="flex flex-wrap gap-0.5">
+    <div className="mb-2">
+      <span className="block text-[13px] font-semibold text-muted">{label}</span>
+      <div className="-ml-1.5 flex flex-wrap">
         {options.map((c) => {
           const on = c.toLowerCase() === value.toLowerCase();
           return (
