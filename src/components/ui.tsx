@@ -4,7 +4,7 @@ import type { Avatar as AvatarT, Person } from '../lib/api';
 import { HOLO } from '../lib/departments';
 import { Sprite } from './Sprite';
 
-type PillVariant = 'primary' | 'secondary' | 'dark' | 'ghost';
+type PillVariant = 'primary' | 'secondary' | 'dark' | 'ghost' | 'light';
 
 const pillBase =
   'inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-6 font-semibold transition-transform active:scale-[.97] disabled:opacity-40 disabled:active:scale-100 select-none';
@@ -13,6 +13,7 @@ const pillVariants: Record<PillVariant, string> = {
   secondary: 'border-[1.5px] border-ink bg-transparent text-ink',
   dark: 'bg-ink text-white',
   ghost: 'bg-white/70 text-ink',
+  light: 'border-[1.5px] border-white/70 bg-transparent text-white',
 };
 
 export function pillClass(variant: PillVariant = 'primary', extra = '') {

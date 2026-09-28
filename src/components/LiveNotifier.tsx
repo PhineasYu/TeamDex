@@ -1,9 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api, type Person, type TeamdexEvent } from '../lib/api';
 import { useLiveEvents } from '../lib/hooks';
 import { useSession } from '../lib/session';
 import { play, vibrate } from '../lib/sound';
+import { ExchangeReveal } from './ExchangeReveal';
 import { useToast } from './Toast';
+import { Pill } from './ui';
 
 /** Global realtime toasts for colleagues and HR (works on every page, e.g. while showing My card). */
 export function LiveNotifier() {
@@ -11,6 +14,8 @@ export function LiveNotifier() {
   const toast = useToast();
   const cache = useRef(new Map<string, Person>());
   const active = session && session.role !== 'newcomer';
+  const nav = useNavigate();
+  const [exchange, setExchange] = useState<{ theirs: Person; mine: Person | null; key: number } | null>(null);
 
   const person = async (id: string | null) => {
     if (!id) return undefined;
@@ -29,9 +34,10 @@ export function LiveNotifier() {
 
     if (session.role === 'colleague') {
       if (e.type === 'card_collected' && e.target_id === me) {
-        toast({ title: `${name} collected your card.`, body: 'You got their newcomer card too.', person: actor });
-        play('pop');
-        vibrate(40);
+        // Full-screen swap on the colleague's phone too: their newcomer card comes in, yours goes out.
+        const mine = await person(me);
+        if (actor) setExchange({ theirs: actor, mine: mine ?? null, key: e.id });
+        else toast({ title: `${name} collected your card.`, body: 'You got their newcomer card too.' });
       } else if (e.type === 'party_unlocked' || e.type === 'quest_created') {
         const quest = await api.getQuestForNewcomer(e.actor_id ?? '');
         if (!quest?.targets.some((t) => t.person_id === me)) return;
@@ -64,5 +70,28 @@ export function LiveNotifier() {
     toast({ title, person: actor });
   });
 
-  return null;
+  if (!exchange) return null;
+  return (
+    <ExchangeReveal
+      key={exchange.key}
+      theirs={exchange.theirs}
+      mine={exchange.mine}
+      title="Card exchanged!"
+      subtitle={`${exchange.theirs.display_name} collected your card. You got their newcomer card too.`}
+    >
+      <Pill block onClick={() => setExchange(null)}>
+        Nice!
+      </Pill>
+      <Pill
+        variant="light"
+        block
+        onClick={() => {
+          setExchange(null);
+          nav('/me');
+        }}
+      >
+        See my newcomer cards
+      </Pill>
+    </ExchangeReveal>
+  );
 }

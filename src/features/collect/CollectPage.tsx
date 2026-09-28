@@ -2,7 +2,7 @@ import { PartyPopper } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Card } from '../../components/Card';
-import { CardReveal } from '../../components/CardReveal';
+import { ExchangeReveal } from '../../components/ExchangeReveal';
 import { Pill, PillLink, Spinner } from '../../components/ui';
 import { api, type Person } from '../../lib/api';
 import { homeFor, setPendingToken, useSession } from '../../lib/session';
@@ -15,7 +15,7 @@ type View =
   | { kind: 'own'; person: Person }
   | { kind: 'unavailable' }
   | { kind: 'error' }
-  | { kind: 'collected'; person: Person; already: boolean; partyUnlocked: boolean; fact: string | null };
+  | { kind: 'collected'; person: Person; me: Person | null; already: boolean; partyUnlocked: boolean; fact: string | null };
 
 /** /c/:token — the link inside every card's QR code. See tech spec §7. */
 export function CollectPage() {
@@ -50,7 +50,7 @@ export function CollectPage() {
         }
 
         // 2. Collect.
-        const res = await api.collectCard(session.personId, token);
+        const [res, me] = await Promise.all([api.collectCard(session.personId, token), api.getPerson(session.personId)]);
         if (!res.ok) {
           if (res.error === 'own_card') {
             const me = await api.getPerson(session.personId);
@@ -59,7 +59,7 @@ export function CollectPage() {
           return setView({ kind: 'unavailable' });
         }
         const facts = res.already ? await api.getUnlockedFacts(session.personId) : {};
-        setView({ kind: 'collected', person: res.person, already: res.already, partyUnlocked: res.partyUnlocked, fact: facts[res.person.id] ?? null });
+        setView({ kind: 'collected', person: res.person, me, already: res.already, partyUnlocked: res.partyUnlocked, fact: facts[res.person.id] ?? null });
       } catch {
         setView({ kind: 'error' });
       }
@@ -68,21 +68,22 @@ export function CollectPage() {
 
   if (view.kind === 'loading') {
     return (
-      <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-sky">
+      <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-ink">
         <Spinner label="Collecting card" />
       </div>
     );
   }
 
   if (view.kind === 'collected') {
-    const { person, already, partyUnlocked, fact } = view;
+    const { person, me, already, partyUnlocked, fact } = view;
     return (
-      <CardReveal
-        person={person}
+      <ExchangeReveal
+        theirs={person}
+        mine={me}
         fact={fact}
         still={already}
         title={already ? 'Already in your Teamdex' : 'New card!'}
-        subtitle={already ? undefined : `${person.display_name} joined your collection. They got your card too.`}
+        subtitle={already ? 'Drag the card to tilt it.' : `You swapped cards with ${person.display_name}.`}
       >
         {partyUnlocked && (
           <Pill
@@ -95,13 +96,13 @@ export function CollectPage() {
             <PartyPopper size={18} /> Your party is unlocked!
           </Pill>
         )}
-        <PillLink to={`/quest/card/${person.id}`} variant={partyUnlocked ? 'dark' : 'primary'} block>
+        <PillLink to={`/quest/card/${person.id}`} variant={partyUnlocked ? 'light' : 'primary'} block>
           Open card
         </PillLink>
-        <PillLink to="/quest" variant="secondary" block>
+        <PillLink to="/quest" variant="light" block>
           Back to my Teamdex
         </PillLink>
-      </CardReveal>
+      </ExchangeReveal>
     );
   }
 

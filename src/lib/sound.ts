@@ -65,7 +65,37 @@ function tone(f: number, type: OscillatorType, dur: number, peak: number, t0 = 0
   o.stop(t + dur + 0.05);
 }
 
+function noise(dur: number, peak: number, type: BiquadFilterType, f0: number, f1?: number, t0 = 0) {
+  if (!ac || !master) return;
+  const t = ac.currentTime + t0;
+  const len = Math.max(1, Math.floor(ac.sampleRate * dur));
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  const src = ac.createBufferSource();
+  src.buffer = buf;
+  const f = ac.createBiquadFilter();
+  f.type = type;
+  f.frequency.setValueAtTime(f0, t);
+  if (f1) f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(peak, t + dur * 0.3);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.connect(f);
+  f.connect(g);
+  g.connect(master);
+  src.start(t);
+  src.stop(t + dur + 0.05);
+}
+
 const FX = {
+  whoosh: () => noise(0.55, 0.22, 'bandpass', 300, 2600),
+  impact: () => {
+    tone(110, 'sine', 0.38, 0.5, 0, 48);
+    noise(0.18, 0.28, 'highpass', 1500);
+    tone(1760, 'sine', 0.3, 0.09);
+  },
   reveal: () => [1318, 1568, 1976, 2637, 3136].forEach((f, i) => tone(f, 'sine', 0.35, 0.06, i * 0.05)),
   pop: () => tone(540, 'sine', 0.14, 0.32, 0, 190),
   unlock: () => {
@@ -89,7 +119,7 @@ export function play(k: Sfx) {
   }
 }
 
-export function vibrate(ms = 40) {
+export function vibrate(ms: number | number[] = 40) {
   try {
     // Chrome logs an error if vibrate is called before the user has tapped the page
     const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;

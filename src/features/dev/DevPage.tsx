@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card } from '../../components/Card';
-import { CardReveal } from '../../components/CardReveal';
+import { ExchangeReveal } from '../../components/ExchangeReveal';
 import { PixelParty } from '../../components/PixelParty';
 import { Sprite } from '../../components/Sprite';
 import { useToast } from '../../components/Toast';
@@ -24,14 +24,14 @@ export function DevPage() {
 
   if (reveal > 0) {
     return (
-      <CardReveal key={reveal} person={oskar} subtitle="Oskar joined your collection">
+      <ExchangeReveal key={reveal} theirs={oskar} mine={data.find((p) => p.kind === 'newcomer')} title="New card!" subtitle="You swapped cards with Oskar.">
         <Pill block onClick={() => setReveal((r) => r + 1)}>
           Replay reveal
         </Pill>
-        <Pill variant="secondary" block onClick={() => setReveal(0)}>
+        <Pill variant="light" block onClick={() => setReveal(0)}>
           Close
         </Pill>
-      </CardReveal>
+      </ExchangeReveal>
     );
   }
 
